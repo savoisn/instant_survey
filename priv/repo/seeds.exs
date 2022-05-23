@@ -16,7 +16,9 @@ alias InstantSurvey.Accounts.User
 
 # alias InstantSurvey.Game
 alias InstantSurvey.Game.Survey
+alias InstantSurvey.Game.Question
 
+Repo.delete_all(Question)
 Repo.delete_all(Survey)
 Repo.delete_all(User)
 
@@ -50,3 +52,15 @@ IO.inspect(survey)
 user = Repo.preload(nsavois, :surveys)
 
 IO.inspect(user)
+
+question1_survey_nsavois = %{
+  text: "question 1 de la survey nsavois"
+}
+
+question1_survey_nsavois = Ecto.build_assoc(survey, :questions, question1_survey_nsavois)
+
+question1_survey_nsavois =
+  Repo.insert!(question1_survey_nsavois)
+  |> Repo.preload(:surveys)
+
+IO.inspect(question1_survey_nsavois)

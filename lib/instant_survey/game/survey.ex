@@ -6,6 +6,7 @@ defmodule InstantSurvey.Game.Survey do
     field :title, :string
 
     belongs_to :users, InstantSurvey.Accounts.User, foreign_key: :owner_id
+    has_many :questions, InstantSurvey.Game.Question
 
     timestamps()
   end
