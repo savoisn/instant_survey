@@ -110,4 +110,58 @@ defmodule InstantSurvey.GameTest do
       assert %Ecto.Changeset{} = Game.change_question(question)
     end
   end
+
+  describe "choices" do
+    alias InstantSurvey.Game.Choice
+
+    import InstantSurvey.GameFixtures
+
+    @invalid_attrs %{text: nil}
+
+    test "list_choices/0 returns all choices" do
+      choice = choice_fixture()
+      assert Game.list_choices() == [choice]
+    end
+
+    test "get_choice!/1 returns the choice with given id" do
+      choice = choice_fixture()
+      assert Game.get_choice!(choice.id) == choice
+    end
+
+    test "create_choice/1 with valid data creates a choice" do
+      valid_attrs = %{text: "some text"}
+
+      assert {:ok, %Choice{} = choice} = Game.create_choice(valid_attrs)
+      assert choice.text == "some text"
+    end
+
+    test "create_choice/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Game.create_choice(@invalid_attrs)
+    end
+
+    test "update_choice/2 with valid data updates the choice" do
+      choice = choice_fixture()
+      update_attrs = %{text: "some updated text"}
+
+      assert {:ok, %Choice{} = choice} = Game.update_choice(choice, update_attrs)
+      assert choice.text == "some updated text"
+    end
+
+    test "update_choice/2 with invalid data returns error changeset" do
+      choice = choice_fixture()
+      assert {:error, %Ecto.Changeset{}} = Game.update_choice(choice, @invalid_attrs)
+      assert choice == Game.get_choice!(choice.id)
+    end
+
+    test "delete_choice/1 deletes the choice" do
+      choice = choice_fixture()
+      assert {:ok, %Choice{}} = Game.delete_choice(choice)
+      assert_raise Ecto.NoResultsError, fn -> Game.get_choice!(choice.id) end
+    end
+
+    test "change_choice/1 returns a choice changeset" do
+      choice = choice_fixture()
+      assert %Ecto.Changeset{} = Game.change_choice(choice)
+    end
+  end
 end

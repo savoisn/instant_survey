@@ -31,4 +31,18 @@ defmodule InstantSurvey.GameFixtures do
 
     question
   end
+
+  @doc """
+  Generate a choice.
+  """
+  def choice_fixture(attrs \\ %{}) do
+    {:ok, choice} =
+      attrs
+      |> Enum.into(%{
+        text: "some text"
+      })
+      |> InstantSurvey.Game.create_choice()
+
+    choice
+  end
 end
