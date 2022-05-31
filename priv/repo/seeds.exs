@@ -18,7 +18,9 @@ alias InstantSurvey.Game
 alias InstantSurvey.Game.Survey
 alias InstantSurvey.Game.Question
 alias InstantSurvey.Game.Choice
+alias InstantSurvey.Game.Answer
 
+Repo.delete_all(Answer)
 Repo.delete_all(Choice)
 Repo.delete_all(Question)
 Repo.delete_all(Survey)
@@ -88,3 +90,14 @@ choice_q2_nsa =
 question1_survey_nsavois = Repo.preload(question1_survey_nsavois, :choices)
 
 IO.inspect(question1_survey_nsavois)
+
+answer_q1 = %{}
+answer_q1 = Ecto.build_assoc(choice_q1_nsa, :answers, answer_q1)
+answer_q1 = Ecto.build_assoc(question1_survey_nsavois, :answers, answer_q1)
+answer_q1 = Ecto.build_assoc(nsavois, :answers, answer_q1)
+
+answer_q1 =
+  Repo.insert!(answer_q1)
+  |> Repo.preload([:choice, :question, :user])
+
+IO.inspect(answer_q1)

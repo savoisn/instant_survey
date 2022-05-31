@@ -11,6 +11,7 @@ defmodule InstantSurveyWeb.Router do
     resources "/surveys", SurveyController, except: [:new, :edit]
     resources "/questions", QuestionController, except: [:new, :edit]
     resources "/choices", ChoiceController, except: [:new, :edit]
+    resources "/answers", AnswerController, except: [:new, :edit]
   end
 
   # Enables LiveDashboard only for development

@@ -7,6 +7,7 @@ defmodule InstantSurvey.Game.Question do
 
     belongs_to :surveys, InstantSurvey.Game.Survey, foreign_key: :survey_id
     has_many :choices, InstantSurvey.Game.Choice
+    has_many :answers, InstantSurvey.Game.Answer
 
     timestamps()
   end

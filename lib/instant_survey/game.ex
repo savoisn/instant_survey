@@ -293,4 +293,74 @@ defmodule InstantSurvey.Game do
   def change_choice(%Choice{} = choice, attrs \\ %{}) do
     Choice.changeset(choice, attrs)
   end
+
+  alias InstantSurvey.Game.Answer
+
+  @doc """
+  Returns the list of answers.
+
+  ## Examples
+
+      iex> list_answers()
+      [%Answer{}, ...]
+
+  """
+  def list_answers do
+    Repo.all(Answer)
+  end
+
+  @doc """
+  Gets a single answer.
+
+  Raises `Ecto.NoResultsError` if the Answer does not exist.
+
+  ## Examples
+
+      iex> get_answer!(123)
+      %Answer{}
+
+      iex> get_answer!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_answer!(id), do: Repo.get!(Answer, id)
+
+  @doc """
+  Creates a answer.
+
+  ## Examples
+
+      iex> create_answer(%{field: value})
+      {:ok, %Answer{}}
+
+      iex> create_answer(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_answer(
+        %InstantSurvey.Accounts.User{} = user,
+        %Question{} = question,
+        %Choice{} = choice
+      ) do
+    answer = Ecto.build_assoc(question, :answers, %Answer{})
+    answer = Ecto.build_assoc(choice, :answers, answer)
+    answer = Ecto.build_assoc(user, :answers, answer)
+    Repo.insert!(answer)
+  end
+
+  @doc """
+  Deletes a answer.
+
+  ## Examples
+
+      iex> delete_answer(answer)
+      {:ok, %Answer{}}
+
+      iex> delete_answer(answer)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_answer(%Answer{} = answer) do
+    Repo.delete(answer)
+  end
 end

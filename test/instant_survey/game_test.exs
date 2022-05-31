@@ -164,4 +164,36 @@ defmodule InstantSurvey.GameTest do
       assert %Ecto.Changeset{} = Game.change_choice(choice)
     end
   end
+
+  describe "answers" do
+    alias InstantSurvey.Game.Answer
+
+    import InstantSurvey.GameFixtures
+
+    @invalid_attrs %{}
+
+    test "list_answers/0 returns all answers" do
+      answer = answer_fixture()
+      assert Game.list_answers() == [answer]
+    end
+
+    test "get_answer!/1 returns the answer with given id" do
+      answer = answer_fixture()
+      assert Game.get_answer!(answer.id) == answer
+    end
+
+    test "create_answer/1 with valid data creates a answer" do
+      user = InstantSurvey.AccountsFixtures.user_fixture()
+      question = question_fixture()
+      choice = choice_fixture()
+
+      assert %Answer{} = Game.create_answer(user, question, choice)
+    end
+
+    test "delete_answer/1 deletes the answer" do
+      answer = answer_fixture()
+      assert {:ok, %Answer{}} = Game.delete_answer(answer)
+      assert_raise Ecto.NoResultsError, fn -> Game.get_answer!(answer.id) end
+    end
+  end
 end

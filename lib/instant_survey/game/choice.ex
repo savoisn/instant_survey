@@ -6,6 +6,7 @@ defmodule InstantSurvey.Game.Choice do
     field :text, :string
 
     belongs_to :question, InstantSurvey.Game.Question, foreign_key: :question_id
+    has_many :answers, InstantSurvey.Game.Answer
 
     timestamps()
   end
