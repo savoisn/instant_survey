@@ -1,6 +1,20 @@
 # InstantSurvey
 
-To start your Phoenix server:
+To start with docker
+
+build : 
+
+`docker build -t talanlabs/instant_survey:latest .`
+
+run : 
+
+`docker run -p 4000:4000 talanlabs/instant_survey:latest`
+
+test : 
+
+`curl -s -XGET http://localhost:4000/api/surveys/1`
+
+To start your Phoenix server for local dev:
 
   * Install dependencies with `mix deps.get`
   * Create and migrate your database with `mix ecto.setup`

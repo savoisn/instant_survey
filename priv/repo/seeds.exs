@@ -101,3 +101,12 @@ answer_q1 =
   |> Repo.preload([:choice, :question, :user])
 
 IO.inspect(answer_q1)
+
+survey_id = survey.id
+survey = Game.get_survey!(survey_id)
+IO.inspect(survey)
+
+question_params = %{"text" => "some text"}
+question = Game.create_question(question_params, survey)
+
+IO.inspect(question)

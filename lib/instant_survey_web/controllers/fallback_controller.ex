@@ -21,4 +21,11 @@ defmodule InstantSurveyWeb.FallbackController do
     |> put_view(InstantSurveyWeb.ErrorView)
     |> render(:"404")
   end
+
+  def call(conn, {:error, :bad_params}) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> put_view(InstantSurveyWeb.ErrorView)
+    |> render(:"422")
+  end
 end

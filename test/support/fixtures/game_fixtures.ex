@@ -24,12 +24,14 @@ defmodule InstantSurvey.GameFixtures do
   Generate a question.
   """
   def question_fixture(attrs \\ %{}) do
+    survey = survey_fixture()
+
     {:ok, question} =
       attrs
       |> Enum.into(%{
         text: "some text"
       })
-      |> InstantSurvey.Game.create_question()
+      |> InstantSurvey.Game.create_question(survey)
 
     question
   end
@@ -38,12 +40,14 @@ defmodule InstantSurvey.GameFixtures do
   Generate a choice.
   """
   def choice_fixture(attrs \\ %{}) do
+    question = question_fixture()
+
     {:ok, choice} =
       attrs
       |> Enum.into(%{
         text: "some text"
       })
-      |> InstantSurvey.Game.create_choice()
+      |> InstantSurvey.Game.create_choice(question)
 
     choice
   end
@@ -51,7 +55,7 @@ defmodule InstantSurvey.GameFixtures do
   @doc """
   Generate a answer.
   """
-  def answer_fixture(attrs \\ %{}) do
+  def answer_fixture(_attrs \\ %{}) do
     user = InstantSurvey.AccountsFixtures.user_fixture()
 
     survey_data = %{

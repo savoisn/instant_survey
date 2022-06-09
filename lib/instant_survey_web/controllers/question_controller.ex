@@ -11,11 +11,16 @@ defmodule InstantSurveyWeb.QuestionController do
     render(conn, "index.json", questions: questions)
   end
 
-  def create(conn, %{"question" => question_params}) do
-    with {:ok, %Question{} = question} <- Game.create_question(question_params) do
+  def create(conn, %{"question" => question_params, "survey_id" => survey_id}) do
+    survey = Game.get_survey!(survey_id)
+
+    with {:ok, %Question{} = question} <- Game.create_question(question_params, survey) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.question_path(conn, :show, question))
+      |> put_resp_header(
+        "location",
+        Routes.survey_question_path(conn, :show, survey_id, question)
+      )
       |> render("show.json", question: question)
     end
   end

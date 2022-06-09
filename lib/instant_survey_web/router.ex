@@ -8,10 +8,13 @@ defmodule InstantSurveyWeb.Router do
   scope "/api", InstantSurveyWeb do
     pipe_through :api
     resources "/users", UserController, except: [:new, :edit]
-    resources "/surveys", SurveyController, except: [:new, :edit]
-    resources "/questions", QuestionController, except: [:new, :edit]
-    resources "/choices", ChoiceController, except: [:new, :edit]
-    resources "/answers", AnswerController, except: [:new, :edit]
+
+    resources "/surveys", SurveyController, except: [:new, :edit] do
+      resources "/questions", QuestionController, except: [:new, :edit] do
+        resources "/choices", ChoiceController, except: [:new, :edit]
+        resources "/answers", AnswerController, except: [:new, :edit]
+      end
+    end
   end
 
   # Enables LiveDashboard only for development

@@ -33,6 +33,7 @@ defmodule InstantSurvey.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:atomic_map, "~> 0.9.3"},
       {:phoenix, "~> 1.6.9"},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.6"},

@@ -12,7 +12,7 @@ config :instant_survey,
 
 # Configures the endpoint
 config :instant_survey, InstantSurveyWeb.Endpoint,
-  url: [host: "localhost"],
+  url: [host: "0.0.0.0"],
   render_errors: [view: InstantSurveyWeb.ErrorView, accepts: ~w(json), layout: false],
   pubsub_server: InstantSurvey.PubSub,
   live_view: [signing_salt: "eUx2ux1E"]

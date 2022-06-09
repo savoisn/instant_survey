@@ -36,6 +36,7 @@ defmodule InstantSurvey.Game do
 
   """
   def get_survey!(id), do: Repo.get!(Survey, id)
+  def get_survey(id), do: Repo.get(Survey, id)
 
   @doc """
   Creates a survey.
@@ -132,6 +133,7 @@ defmodule InstantSurvey.Game do
 
   """
   def get_question!(id), do: Repo.get!(Question, id)
+  def get_question(id), do: Repo.get(Question, id)
 
   @doc """
   Creates a question.
@@ -145,10 +147,24 @@ defmodule InstantSurvey.Game do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_question(attrs \\ %{}) do
-    %Question{}
-    |> Question.changeset(attrs)
-    |> Repo.insert()
+
+  # def create_question(attrs \\ %{}) do
+  # %Question{}
+  # |> Question.changeset(attrs)
+  # |> Repo.insert()
+  # end
+
+  def create_question(attrs, %Survey{} = survey) do
+    attrs = AtomicMap.convert(attrs)
+
+    # attrs =
+    # %Question{}
+    # |> Question.changeset(attrs)
+
+    question = Ecto.build_assoc(survey, :questions, attrs)
+    question = Question.changeset(question, attrs)
+    IO.inspect(question)
+    Repo.insert(question)
   end
 
   @doc """
@@ -228,6 +244,7 @@ defmodule InstantSurvey.Game do
 
   """
   def get_choice!(id), do: Repo.get!(Choice, id)
+  def get_choice(id), do: Repo.get(Choice, id)
 
   @doc """
   Creates a choice.
@@ -241,10 +258,17 @@ defmodule InstantSurvey.Game do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_choice(attrs \\ %{}) do
-    %Choice{}
-    |> Choice.changeset(attrs)
-    |> Repo.insert()
+  def create_choice(attrs \\ %{}, question) do
+    attrs = AtomicMap.convert(attrs)
+
+    # attrs =
+    # %Question{}
+    # |> Question.changeset(attrs)
+
+    choice = Ecto.build_assoc(question, :choices, attrs)
+    choice = Choice.changeset(choice, attrs)
+    IO.inspect(choice)
+    Repo.insert(choice)
   end
 
   @doc """
@@ -324,6 +348,7 @@ defmodule InstantSurvey.Game do
 
   """
   def get_answer!(id), do: Repo.get!(Answer, id)
+  def get_answer(id), do: Repo.get(Answer, id)
 
   @doc """
   Creates a answer.
@@ -345,7 +370,7 @@ defmodule InstantSurvey.Game do
     answer = Ecto.build_assoc(question, :answers, %Answer{})
     answer = Ecto.build_assoc(choice, :answers, answer)
     answer = Ecto.build_assoc(user, :answers, answer)
-    Repo.insert!(answer)
+    Repo.insert(answer)
   end
 
   @doc """

@@ -77,12 +77,14 @@ defmodule InstantSurvey.GameTest do
     test "create_question/1 with valid data creates a question" do
       valid_attrs = %{text: "some text"}
 
-      assert {:ok, %Question{} = question} = Game.create_question(valid_attrs)
+      survey = survey_fixture()
+      assert {:ok, %Question{} = question} = Game.create_question(valid_attrs, survey)
       assert question.text == "some text"
     end
 
     test "create_question/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Game.create_question(@invalid_attrs)
+      survey = survey_fixture()
+      assert {:error, %Ecto.Changeset{}} = Game.create_question(@invalid_attrs, survey)
     end
 
     test "update_question/2 with valid data updates the question" do
@@ -131,12 +133,14 @@ defmodule InstantSurvey.GameTest do
     test "create_choice/1 with valid data creates a choice" do
       valid_attrs = %{text: "some text"}
 
-      assert {:ok, %Choice{} = choice} = Game.create_choice(valid_attrs)
+      question = question_fixture()
+      assert {:ok, %Choice{} = choice} = Game.create_choice(valid_attrs, question)
       assert choice.text == "some text"
     end
 
     test "create_choice/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Game.create_choice(@invalid_attrs)
+      question = question_fixture()
+      assert {:error, %Ecto.Changeset{}} = Game.create_choice(@invalid_attrs, question)
     end
 
     test "update_choice/2 with valid data updates the choice" do
@@ -187,7 +191,7 @@ defmodule InstantSurvey.GameTest do
       question = question_fixture()
       choice = choice_fixture()
 
-      assert %Answer{} = Game.create_answer(user, question, choice)
+      assert {:ok, %Answer{}} = Game.create_answer(user, question, choice)
     end
 
     test "delete_answer/1 deletes the answer" do

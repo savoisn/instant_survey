@@ -16,6 +16,19 @@ defmodule InstantSurvey.Game.Question do
   def changeset(question, attrs) do
     question
     |> cast(attrs, [:text])
-    |> validate_required([:text])
+    |> validate_required([:text, :survey_id])
+    |> validate_not_nil([:text])
+
+    # IO.inspect(question)
+  end
+
+  def validate_not_nil(changeset, fields) do
+    Enum.reduce(fields, changeset, fn field, changeset ->
+      if get_field(changeset, field) == nil do
+        add_error(changeset, field, "nil")
+      else
+        changeset
+      end
+    end)
   end
 end
