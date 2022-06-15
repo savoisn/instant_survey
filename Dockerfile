@@ -1,20 +1,5 @@
 # Extend from the official Elixir image.
-FROM ubuntu:18.04
-
-ENV DEBIAN_FRONTEND=noninteractive
-
-
-RUN apt-get update && \
-  apt-get -y install wget gnupg build-essential locales
-
-RUN locale-gen en_US.UTF-8 && \
-  update-locale LANG=en_US.UTF-8
-
-RUN wget https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb && \
-  dpkg -i erlang-solutions_2.0_all.deb && \
-  apt-get update && \
-  apt-get -y install erlang && \
-  apt-get -y install elixir
+FROM elixir:1.13.4
 
 # Create app directory and copy the Elixir projects into it.
 RUN mkdir /app
