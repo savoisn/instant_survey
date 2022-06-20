@@ -6,7 +6,8 @@ defmodule InstantSurveyWeb.SurveyControllerTest do
   alias InstantSurvey.Game.Survey
 
   @create_attrs %{
-    title: "some title"
+    title: "some title",
+    user_id: 1
   }
   @update_attrs %{
     title: "some updated title"
@@ -25,6 +26,8 @@ defmodule InstantSurveyWeb.SurveyControllerTest do
   end
 
   describe "create survey" do
+    setup [:create_user]
+
     test "renders survey when data is valid", %{conn: conn} do
       conn = post(conn, Routes.survey_path(conn, :create), survey: @create_attrs)
       assert %{"id" => id} = json_response(conn, 201)["data"]
@@ -80,5 +83,10 @@ defmodule InstantSurveyWeb.SurveyControllerTest do
   defp create_survey(_) do
     survey = survey_fixture()
     %{survey: survey}
+  end
+
+  defp create_user(_) do
+    user = InstantSurvey.AccountsFixtures.user_fixture()
+    %{user: user}
   end
 end

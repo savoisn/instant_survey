@@ -18,8 +18,6 @@ defmodule InstantSurvey.Game.Question do
     |> cast(attrs, [:text])
     |> validate_required([:text, :survey_id])
     |> validate_not_nil([:text])
-
-    # IO.inspect(question)
   end
 
   def validate_not_nil(changeset, fields) do

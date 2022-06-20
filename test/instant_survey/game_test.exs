@@ -22,13 +22,15 @@ defmodule InstantSurvey.GameTest do
 
     test "create_survey/1 with valid data creates a survey" do
       valid_attrs = %{title: "some title"}
+      user = InstantSurvey.AccountsFixtures.user_fixture()
 
-      assert {:ok, %Survey{} = survey} = Game.create_survey(valid_attrs)
+      assert {:ok, %Survey{} = survey} = Game.create_survey(valid_attrs, user)
       assert survey.title == "some title"
     end
 
     test "create_survey/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Game.create_survey(@invalid_attrs)
+      user = InstantSurvey.AccountsFixtures.user_fixture()
+      assert {:error, %Ecto.Changeset{}} = Game.create_survey(@invalid_attrs, user)
     end
 
     test "update_survey/2 with valid data updates the survey" do
@@ -173,8 +175,6 @@ defmodule InstantSurvey.GameTest do
     alias InstantSurvey.Game.Answer
 
     import InstantSurvey.GameFixtures
-
-    @invalid_attrs %{}
 
     test "list_answers/0 returns all answers" do
       answer = answer_fixture()

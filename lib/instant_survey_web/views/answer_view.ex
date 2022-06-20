@@ -12,7 +12,10 @@ defmodule InstantSurveyWeb.AnswerView do
 
   def render("answer.json", %{answer: answer}) do
     %{
-      id: answer.id
+      id: answer.id,
+      question_id: answer.question_id,
+      choice_id: answer.choice_id,
+      user_id: answer.user_id
     }
   end
 end

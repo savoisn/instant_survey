@@ -10,12 +10,14 @@ defmodule InstantSurvey.GameFixtures do
   Generate a survey.
   """
   def survey_fixture(attrs \\ %{}) do
+    user = InstantSurvey.AccountsFixtures.user_fixture()
+
     {:ok, survey} =
       attrs
       |> Enum.into(%{
         title: "some title"
       })
-      |> InstantSurvey.Game.create_survey()
+      |> InstantSurvey.Game.create_survey(user)
 
     survey
   end

@@ -4,10 +4,7 @@ defmodule InstantSurveyWeb.AnswerControllerTest do
   import InstantSurvey.GameFixtures
   import InstantSurvey.AccountsFixtures
 
-  alias InstantSurvey.Game.Answer
-
   @create_attrs %{choice_id: 1, user_id: 1}
-  @update_attrs %{}
   @invalid_attrs %{}
 
   setup %{conn: conn} do

@@ -91,11 +91,6 @@ defmodule InstantSurveyWeb.ChoiceControllerTest do
     end
   end
 
-  defp create_survey(_) do
-    survey = survey_fixture()
-    %{survey: survey}
-  end
-
   defp create_question(_) do
     question = question_fixture()
     %{question: question}

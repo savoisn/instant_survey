@@ -1,13 +1,25 @@
 defmodule InstantSurveyWeb.Router do
   use InstantSurveyWeb, :router
 
+  pipeline :browser do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
+    plug CORSPlug, origin: "*"
+
+    plug OpenApiSpex.Plug.PutApiSpec, module: InstantSurveyWeb.ApiSpec
   end
 
   scope "/api", InstantSurveyWeb do
     pipe_through :api
     resources "/users", UserController, except: [:new, :edit]
+
+    get "/surveys/user/:user_id", SurveyController, :index_by_user
 
     resources "/surveys", SurveyController, except: [:new, :edit] do
       resources "/questions", QuestionController, except: [:new, :edit] do
@@ -15,6 +27,18 @@ defmodule InstantSurveyWeb.Router do
         resources "/answers", AnswerController, except: [:new, :edit]
       end
     end
+  end
+
+  scope "/api" do
+    pipe_through :api
+    get "/openapi", OpenApiSpex.Plug.RenderSpec, []
+  end
+
+  scope "/" do
+    # Use the default browser stack
+    pipe_through :browser
+
+    get "/swaggerui", OpenApiSpex.Plug.SwaggerUI, path: "/api/openapi"
   end
 
   # Enables LiveDashboard only for development

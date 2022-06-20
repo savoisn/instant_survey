@@ -16,6 +16,6 @@ defmodule InstantSurvey.Accounts.User do
   def changeset(user, attrs) do
     user
     |> cast(attrs, [:username, :firstname, :lastname])
-    |> validate_required([:username, :firstname, :lastname])
+    |> validate_required([:username])
   end
 end

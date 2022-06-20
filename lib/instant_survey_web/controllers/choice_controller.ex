@@ -1,15 +1,71 @@
 defmodule InstantSurveyWeb.ChoiceController do
   use InstantSurveyWeb, :controller
 
+  use OpenApiSpex.ControllerSpecs
+  alias OpenApiSpex.Schema
+
+  alias InstantSurveyWeb.Schemas.Choice.Responses, as: ChoicesResponse
+  alias InstantSurveyWeb.Schemas.Choice.Response, as: ChoiceResponse
+  alias InstantSurveyWeb.Schemas.Choice.Params, as: ChoiceParams
   alias InstantSurvey.Game
   alias InstantSurvey.Game.Choice
 
   action_fallback InstantSurveyWeb.FallbackController
+  tags(["Choice"])
+
+  operation :index,
+    summary: "Add a choice.",
+    parameters: [
+      survey_id: [
+        in: :path,
+        # `:type` can be an atom, %Schema{}, or %Reference{}
+        type: %Schema{type: :integer, minimum: 1},
+        description: "Survey ID",
+        example: 1,
+        required: true
+      ],
+      question_id: [
+        in: :path,
+        # `:type` can be an atom, %Schema{}, or %Reference{}
+        type: %Schema{type: :integer, minimum: 1},
+        description: "Question ID",
+        example: 1,
+        required: true
+      ]
+    ],
+    responses: [
+      ok: {"Choice response", "application/json", ChoicesResponse}
+    ]
 
   def index(conn, _params) do
     choices = Game.list_choices()
     render(conn, "index.json", choices: choices)
   end
+
+  operation :create,
+    summary: "Add a choice.",
+    parameters: [
+      survey_id: [
+        in: :path,
+        # `:type` can be an atom, %Schema{}, or %Reference{}
+        type: %Schema{type: :integer, minimum: 1},
+        description: "Survey ID",
+        example: 1,
+        required: true
+      ],
+      question_id: [
+        in: :path,
+        # `:type` can be an atom, %Schema{}, or %Reference{}
+        type: %Schema{type: :integer, minimum: 1},
+        description: "Question ID",
+        example: 1,
+        required: true
+      ]
+    ],
+    request_body: {"choice params", "application/json", ChoiceParams},
+    responses: [
+      ok: {"choice response", "application/json", ChoiceResponse}
+    ]
 
   def create(conn, %{
         "choice" => choice_params,
@@ -29,10 +85,47 @@ defmodule InstantSurveyWeb.ChoiceController do
     end
   end
 
+  operation :new, false
+  operation :edit, false
+
+  operation :show,
+    summary: "Add a choice.",
+    parameters: [
+      survey_id: [
+        in: :path,
+        # `:type` can be an atom, %Schema{}, or %Reference{}
+        type: %Schema{type: :integer, minimum: 1},
+        description: "Survey ID",
+        example: 1,
+        required: true
+      ],
+      question_id: [
+        in: :path,
+        # `:type` can be an atom, %Schema{}, or %Reference{}
+        type: %Schema{type: :integer, minimum: 1},
+        description: "Question ID",
+        example: 1,
+        required: true
+      ],
+      id: [
+        in: :path,
+        # `:type` can be an atom, %Schema{}, or %Reference{}
+        type: %Schema{type: :integer, minimum: 1},
+        description: "Choice ID",
+        example: 1,
+        required: true
+      ]
+    ],
+    responses: [
+      ok: {"choice response", "application/json", ChoiceResponse}
+    ]
+
   def show(conn, %{"id" => id}) do
     choice = Game.get_choice!(id)
     render(conn, "show.json", choice: choice)
   end
+
+  operation :update, false
 
   def update(conn, %{"id" => id, "choice" => choice_params}) do
     choice = Game.get_choice!(id)
@@ -41,6 +134,38 @@ defmodule InstantSurveyWeb.ChoiceController do
       render(conn, "show.json", choice: choice)
     end
   end
+
+  operation :delete,
+    summary: "Delete a choice.",
+    parameters: [
+      survey_id: [
+        in: :path,
+        # `:type` can be an atom, %Schema{}, or %Reference{}
+        type: %Schema{type: :integer, minimum: 1},
+        description: "Survey ID",
+        example: 1,
+        required: true
+      ],
+      question_id: [
+        in: :path,
+        # `:type` can be an atom, %Schema{}, or %Reference{}
+        type: %Schema{type: :integer, minimum: 1},
+        description: "Question ID",
+        example: 1,
+        required: true
+      ],
+      id: [
+        in: :path,
+        # `:type` can be an atom, %Schema{}, or %Reference{}
+        type: %Schema{type: :integer, minimum: 1},
+        description: "Choice ID",
+        example: 1,
+        required: true
+      ]
+    ],
+    responses: %{
+      204 => "nothing to show"
+    }
 
   def delete(conn, %{"id" => id}) do
     choice = Game.get_choice!(id)

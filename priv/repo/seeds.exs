@@ -110,3 +110,7 @@ question_params = %{"text" => "some text"}
 question = Game.create_question(question_params, survey)
 
 IO.inspect(question)
+
+# 1 user
+# survey avec 3 ou 4 quesion?
+# des questions avec 2 - 3 et 4 reponse

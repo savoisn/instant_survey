@@ -22,6 +22,21 @@ defmodule InstantSurvey.Game do
   end
 
   @doc """
+  Returns the list of surveys for a user.
+
+  ## Examples
+
+      iex> list_surveys_by_user()
+      [%Survey{}, ...]
+
+  """
+  def list_surveys_by_user(user_id) do
+    query = from s in Survey, where: s.owner_id == ^user_id
+
+    Repo.all(query)
+  end
+
+  @doc """
   Gets a single survey.
 
   Raises `Ecto.NoResultsError` if the Survey does not exist.
@@ -50,10 +65,14 @@ defmodule InstantSurvey.Game do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_survey(attrs \\ %{}) do
-    %Survey{}
-    |> Survey.changeset(attrs)
-    |> Repo.insert()
+  def create_survey(
+        attrs,
+        %InstantSurvey.Accounts.User{} = user
+      ) do
+    attrs = AtomicMap.convert(attrs)
+    survey = Ecto.build_assoc(user, :surveys, attrs)
+    survey = Survey.changeset(survey, attrs)
+    Repo.insert(survey)
   end
 
   @doc """
@@ -163,7 +182,6 @@ defmodule InstantSurvey.Game do
 
     question = Ecto.build_assoc(survey, :questions, attrs)
     question = Question.changeset(question, attrs)
-    IO.inspect(question)
     Repo.insert(question)
   end
 
@@ -267,7 +285,6 @@ defmodule InstantSurvey.Game do
 
     choice = Ecto.build_assoc(question, :choices, attrs)
     choice = Choice.changeset(choice, attrs)
-    IO.inspect(choice)
     Repo.insert(choice)
   end
 

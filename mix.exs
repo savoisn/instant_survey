@@ -34,6 +34,7 @@ defmodule InstantSurvey.MixProject do
   defp deps do
     [
       {:atomic_map, "~> 0.9.3"},
+      {:cors_plug, "~> 3.0"},
       {:phoenix, "~> 1.6.9"},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.6"},
@@ -45,6 +46,7 @@ defmodule InstantSurvey.MixProject do
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
+      {:open_api_spex, "~> 3.11"},
       {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
   end
@@ -60,6 +62,7 @@ defmodule InstantSurvey.MixProject do
       setup: ["deps.get", "ecto.setup"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
+      "openapi.gen": ["openapi.spec.json --spec InstantSurveyWeb.ApiSpec"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
     ]
   end
