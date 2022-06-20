@@ -8,11 +8,15 @@ build :
 
 run : 
 
-`docker run -p 4000:4000 talanlabs/instant_survey:latest`
+`docker run --rm -p 4000:4000 talanlabs/instant_survey:latest`
 
 test : 
 
 `curl -s -XGET http://localhost:4000/api/surveys/1`
+
+the swaggerui :
+
+[http://localhost:4000/swaggerui](http://localhost:4000/swaggerui)
 
 To start your Phoenix server for local dev:
 

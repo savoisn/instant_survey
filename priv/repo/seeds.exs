@@ -34,8 +34,16 @@ user = %{
 
 {:ok, %User{id: nsavois_id} = nsavois} = Accounts.create_user(user)
 
-IO.inspect(nsavois_id)
-IO.inspect(nsavois)
+# IO.inspect(nsavois_id)
+# IO.inspect(nsavois)
+
+alice_data = %{
+  username: "adinuno",
+  firstname: "Alice",
+  lastname: "Di Nuno"
+}
+
+{:ok, alice} = Accounts.create_user(alice_data)
 
 survey_nsavois = %{
   title: "super questionnaire"
@@ -45,17 +53,17 @@ survey = Ecto.build_assoc(nsavois, :surveys, survey_nsavois)
 
 survey = Repo.insert!(survey)
 
-IO.inspect(survey)
+# IO.inspect(survey)
 
 survey =
   Repo.get!(Survey, survey.id)
   |> Repo.preload(:users)
 
-IO.inspect(survey)
+# IO.inspect(survey)
 
 user = Repo.preload(nsavois, :surveys)
 
-IO.inspect(user)
+# IO.inspect(user)
 
 question1_survey_nsavois = %{
   text: "question 1 de la survey nsavois"
@@ -89,7 +97,7 @@ choice_q2_nsa =
 
 question1_survey_nsavois = Repo.preload(question1_survey_nsavois, :choices)
 
-IO.inspect(question1_survey_nsavois)
+# IO.inspect(question1_survey_nsavois)
 
 answer_q1 = %{}
 answer_q1 = Ecto.build_assoc(choice_q1_nsa, :answers, answer_q1)
@@ -100,17 +108,102 @@ answer_q1 =
   Repo.insert!(answer_q1)
   |> Repo.preload([:choice, :question, :user])
 
-IO.inspect(answer_q1)
+# IO.inspect(answer_q1)
 
 survey_id = survey.id
 survey = Game.get_survey!(survey_id)
-IO.inspect(survey)
+# IO.inspect(survey)
 
 question_params = %{"text" => "some text"}
 question = Game.create_question(question_params, survey)
 
-IO.inspect(question)
+# IO.inspect(question)
 
 # 1 user
 # survey avec 3 ou 4 quesion?
 # des questions avec 2 - 3 et 4 reponse
+survey_data_1 = %{
+  survey: "text de la survey_1",
+  questions: [
+    %{
+      question: "text de la question question_1_1",
+      choices: [
+        "text du choice_1_1_1",
+        "text du choice_1_1_2",
+        "text du choice_1_1_3",
+        "text du choice_1_1_4"
+      ]
+    },
+    %{
+      question: "text de la question question_1_2",
+      choices: [
+        "text du choice_1_2_1",
+        "text du choice_1_2_2",
+        "text du choice_1_2_3",
+        "text du choice_1_2_4"
+      ]
+    },
+    %{
+      question: "text de la question question_1_3",
+      choices: [
+        "text du choice_1_3_1",
+        "text du choice_1_3_2",
+        "text du choice_1_3_3",
+        "text du choice_1_3_4"
+      ]
+    },
+    %{
+      question: "text de la question question_1_4",
+      choices: [
+        "text du choice_1_4_1",
+        "text du choice_1_4_2",
+        "text du choice_1_4_3",
+        "text du choice_1_4_4"
+      ]
+    }
+  ]
+}
+
+survey_1 = Game.create_survey_questions_with_choices(alice, survey_data_1)
+IO.inspect(survey_1)
+
+survey_data_2 = %{
+  survey: "text de la survey_2",
+  questions: [
+    %{
+      question: "text de la question question_2_1",
+      choices: [
+        "text du choice_2_1_1",
+        "text du choice_2_1_2",
+        "text du choice_2_1_3"
+      ]
+    },
+    %{
+      question: "text de la question question_2_2",
+      choices: [
+        "text du choice_2_2_1",
+        "text du choice_2_2_2",
+        "text du choice_2_2_3",
+        "text du choice_2_2_4"
+      ]
+    },
+    %{
+      question: "text de la question question_2_3",
+      choices: [
+        "text du choice_2_3_1",
+        "text du choice_2_3_2"
+      ]
+    },
+    %{
+      question: "text de la question question_2_4",
+      choices: [
+        "text du choice_2_4_1",
+        "text du choice_2_4_2",
+        "text du choice_2_4_3"
+      ]
+    }
+  ]
+}
+
+survey_2 = Game.create_survey_questions_with_choices(alice, survey_data_2)
+IO.inspect(survey_2)

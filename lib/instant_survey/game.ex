@@ -405,4 +405,49 @@ defmodule InstantSurvey.Game do
   def delete_answer(%Answer{} = answer) do
     Repo.delete(answer)
   end
+
+  def create_survey_questions_with_choices(user, %{survey: survey_text, questions: questions}) do
+    survey_data = %{
+      title: survey_text
+    }
+
+    survey_assoc = Ecto.build_assoc(user, :surveys, survey_data)
+
+    survey = Repo.insert!(survey_assoc)
+
+    Enum.each(questions, fn question ->
+      create_question_with_choices(survey, question)
+    end)
+
+    Repo.preload(survey, questions: [:choices])
+  end
+
+  def create_question_with_choices(survey, %{question: text, choices: choices}) do
+    question_data = %{
+      text: text
+    }
+
+    question_assoc = Ecto.build_assoc(survey, :questions, question_data)
+
+    question =
+      Repo.insert!(question_assoc)
+      |> Repo.preload(:surveys)
+
+    Enum.each(choices, fn choice_text ->
+      create_choice_preload(question, choice_text)
+    end)
+
+    Repo.preload(question, :choices)
+  end
+
+  defp create_choice_preload(question, choice_text) do
+    choice_data = %{
+      text: choice_text
+    }
+
+    choice_assoc = Ecto.build_assoc(question, :choices, choice_data)
+
+    Repo.insert!(choice_assoc)
+    |> Repo.preload(:question)
+  end
 end
