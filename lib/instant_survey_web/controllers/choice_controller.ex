@@ -37,8 +37,11 @@ defmodule InstantSurveyWeb.ChoiceController do
       ok: {"Choice response", "application/json", ChoicesResponse}
     ]
 
-  def index(conn, _params) do
-    choices = Game.list_choices()
+  def index(conn, %{
+        "survey_id" => survey_id,
+        "question_id" => question_id
+      }) do
+    choices = Game.list_choices_by_question(question_id, survey_id)
     render(conn, "index.json", choices: choices)
   end
 

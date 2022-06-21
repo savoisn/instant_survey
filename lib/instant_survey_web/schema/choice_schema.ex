@@ -39,7 +39,7 @@ defmodule InstantSurveyWeb.Schemas.Choice do
         "data" => %{
           "id" => 1,
           "text" => "the choice text",
-          "survey_id" => 1
+          "question_id" => 1
         }
       }
     })

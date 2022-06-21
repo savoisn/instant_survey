@@ -132,7 +132,8 @@ survey_data_1 = %{
         "text du choice_1_1_2",
         "text du choice_1_1_3",
         "text du choice_1_1_4"
-      ]
+      ],
+      answers: [0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 3, 3]
     },
     %{
       question: "text de la question question_1_2",
@@ -141,7 +142,8 @@ survey_data_1 = %{
         "text du choice_1_2_2",
         "text du choice_1_2_3",
         "text du choice_1_2_4"
-      ]
+      ],
+      answers: [0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 3, 3]
     },
     %{
       question: "text de la question question_1_3",
@@ -150,7 +152,8 @@ survey_data_1 = %{
         "text du choice_1_3_2",
         "text du choice_1_3_3",
         "text du choice_1_3_4"
-      ]
+      ],
+      answers: []
     },
     %{
       question: "text de la question question_1_4",
@@ -159,7 +162,8 @@ survey_data_1 = %{
         "text du choice_1_4_2",
         "text du choice_1_4_3",
         "text du choice_1_4_4"
-      ]
+      ],
+      answers: []
     }
   ]
 }
@@ -176,7 +180,8 @@ survey_data_2 = %{
         "text du choice_2_1_1",
         "text du choice_2_1_2",
         "text du choice_2_1_3"
-      ]
+      ],
+      answers: []
     },
     %{
       question: "text de la question question_2_2",
@@ -185,14 +190,16 @@ survey_data_2 = %{
         "text du choice_2_2_2",
         "text du choice_2_2_3",
         "text du choice_2_2_4"
-      ]
+      ],
+      answers: []
     },
     %{
       question: "text de la question question_2_3",
       choices: [
         "text du choice_2_3_1",
         "text du choice_2_3_2"
-      ]
+      ],
+      answers: []
     },
     %{
       question: "text de la question question_2_4",
@@ -200,7 +207,8 @@ survey_data_2 = %{
         "text du choice_2_4_1",
         "text du choice_2_4_2",
         "text du choice_2_4_3"
-      ]
+      ],
+      answers: []
     }
   ]
 }

@@ -137,6 +137,12 @@ defmodule InstantSurvey.Game do
     Repo.all(Question)
   end
 
+  def list_questions_by_survey(survey_id) do
+    query = from q in Question, where: q.survey_id == ^survey_id
+
+    Repo.all(query)
+  end
+
   @doc """
   Gets a single question.
 
@@ -247,6 +253,18 @@ defmodule InstantSurvey.Game do
     Repo.all(Choice)
   end
 
+  def list_choices_by_question(question_id, survey_id) do
+    query =
+      from c in Choice,
+        join: q in Question,
+        on: q.id == c.question_id,
+        join: s in Survey,
+        on: s.id == q.survey_id,
+        where: c.question_id == ^question_id and s.id == ^survey_id
+
+    Repo.all(query)
+  end
+
   @doc """
   Gets a single choice.
 
@@ -350,6 +368,18 @@ defmodule InstantSurvey.Game do
     Repo.all(Answer)
   end
 
+  def list_answers_by_question(question_id, survey_id) do
+    query =
+      from a in Answer,
+        join: q in Question,
+        on: q.id == a.question_id,
+        join: s in Survey,
+        on: s.id == q.survey_id,
+        where: a.question_id == ^question_id and s.id == ^survey_id
+
+    Repo.all(query)
+  end
+
   @doc """
   Gets a single answer.
 
@@ -416,13 +446,17 @@ defmodule InstantSurvey.Game do
     survey = Repo.insert!(survey_assoc)
 
     Enum.each(questions, fn question ->
-      create_question_with_choices(survey, question)
+      create_question_with_choices(survey, question, user)
     end)
 
-    Repo.preload(survey, questions: [:choices])
+    Repo.preload(survey, questions: [:choices, :answers])
   end
 
-  def create_question_with_choices(survey, %{question: text, choices: choices}) do
+  def create_question_with_choices(
+        survey,
+        %{question: text, choices: choices, answers: answers},
+        user
+      ) do
     question_data = %{
       text: text
     }
@@ -433,8 +467,14 @@ defmodule InstantSurvey.Game do
       Repo.insert!(question_assoc)
       |> Repo.preload(:surveys)
 
-    Enum.each(choices, fn choice_text ->
-      create_choice_preload(question, choice_text)
+    choices_db =
+      Enum.map(choices, fn choice_text ->
+        create_choice_preload(question, choice_text)
+      end)
+
+    Enum.each(answers, fn answer ->
+      choice = Enum.at(choices_db, answer)
+      create_answer_seed(choice, question, user)
     end)
 
     Repo.preload(question, :choices)
@@ -449,5 +489,15 @@ defmodule InstantSurvey.Game do
 
     Repo.insert!(choice_assoc)
     |> Repo.preload(:question)
+  end
+
+  defp create_answer_seed(choice, question, user) do
+    answer = %{}
+    answer = Ecto.build_assoc(choice, :answers, answer)
+    answer = Ecto.build_assoc(question, :answers, answer)
+    answer = Ecto.build_assoc(user, :answers, answer)
+
+    Repo.insert!(answer)
+    |> Repo.preload([:choice, :question, :user])
   end
 end
