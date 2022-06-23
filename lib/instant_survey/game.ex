@@ -436,6 +436,24 @@ defmodule InstantSurvey.Game do
     Repo.delete(answer)
   end
 
+  def aggregate_answers(question_id, survey_id) do
+    IO.inspect([question_id, survey_id])
+
+    query =
+      from a in Answer,
+        join: q in Question,
+        on: q.id == a.question_id,
+        join: c in Choice,
+        on: c.id == a.choice_id,
+        join: s in Survey,
+        on: s.id == q.survey_id,
+        group_by: c.text,
+        where: a.question_id == ^question_id and s.id == ^survey_id,
+        select: {c.text, count(c.id)}
+
+    Repo.all(query)
+  end
+
   def create_survey_questions_with_choices(user, %{survey: survey_text, questions: questions}) do
     survey_data = %{
       title: survey_text

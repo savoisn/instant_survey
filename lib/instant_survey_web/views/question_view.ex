@@ -17,4 +17,18 @@ defmodule InstantSurveyWeb.QuestionView do
       survey_id: question.survey_id
     }
   end
+
+  def render("result.json", %{result: params}) do
+    IO.inspect(params)
+    %{data: render_many(params, QuestionView, "res.json", as: :param)}
+  end
+
+  def render("res.json", %{param: param}) do
+    IO.inspect(param)
+
+    %{
+      choice_text: elem(param, 0),
+      choice_count: elem(param, 1)
+    }
+  end
 end

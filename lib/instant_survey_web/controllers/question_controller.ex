@@ -14,7 +14,7 @@ defmodule InstantSurveyWeb.QuestionController do
   tags(["Question"])
 
   operation :index,
-    summary: "Add a question.",
+    summary: "List questions for survey.",
     parameters: [
       survey_id: [
         in: :path,
@@ -83,7 +83,7 @@ defmodule InstantSurveyWeb.QuestionController do
         in: :path,
         # `:type` can be an atom, %Schema{}, or %Reference{}
         type: %Schema{type: :integer, minimum: 1},
-        description: "Survey ID",
+        description: "Question ID",
         example: 1,
         required: true
       ]
@@ -122,7 +122,7 @@ defmodule InstantSurveyWeb.QuestionController do
         in: :path,
         # `:type` can be an atom, %Schema{}, or %Reference{}
         type: %Schema{type: :integer, minimum: 1},
-        description: "Survey ID",
+        description: "Question ID",
         example: 1,
         required: true
       ]
@@ -137,5 +137,35 @@ defmodule InstantSurveyWeb.QuestionController do
     with {:ok, %Question{}} <- Game.delete_question(question) do
       send_resp(conn, :no_content, "")
     end
+  end
+
+  operation :result,
+    summary: "result of a question.",
+    parameters: [
+      survey_id: [
+        in: :path,
+        # `:type` can be an atom, %Schema{}, or %Reference{}
+        type: %Schema{type: :integer, minimum: 1},
+        description: "Survey ID",
+        example: 1,
+        required: true
+      ],
+      question_id: [
+        in: :path,
+        # `:type` can be an atom, %Schema{}, or %Reference{}
+        type: %Schema{type: :integer, minimum: 1},
+        description: "Question ID",
+        example: 1,
+        required: true
+      ]
+    ],
+    responses: [
+      ok: {"Question response", "application/json", QuestionResponse}
+    ]
+
+  def result(conn, %{"question_id" => question_id, "survey_id" => survey_id}) do
+    res = Game.aggregate_answers(question_id, survey_id)
+    IO.inspect(res)
+    render(conn, "result.json", result: res)
   end
 end

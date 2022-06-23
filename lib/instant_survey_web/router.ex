@@ -25,6 +25,7 @@ defmodule InstantSurveyWeb.Router do
       resources "/questions", QuestionController, except: [:new, :edit] do
         resources "/choices", ChoiceController, except: [:new, :edit]
         resources "/answers", AnswerController, except: [:new, :edit]
+        get("/result", QuestionController, :result)
       end
     end
   end
