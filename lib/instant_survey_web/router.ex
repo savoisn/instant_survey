@@ -4,7 +4,9 @@ defmodule InstantSurveyWeb.Router do
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
+    plug :put_root_layout, {InstantSurveyWeb.LayoutView, :root}
     plug :protect_from_forgery
+    plug :fetch_flash
     plug :put_secure_browser_headers
   end
 
@@ -28,6 +30,12 @@ defmodule InstantSurveyWeb.Router do
         get("/result", QuestionController, :result)
       end
     end
+  end
+
+  scope "/", InstantSurveyWeb do
+    pipe_through :browser
+
+    get "/", PageController, :index
   end
 
   scope "/api" do

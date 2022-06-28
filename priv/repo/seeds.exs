@@ -112,10 +112,33 @@ answer_q1 =
 
 survey_id = survey.id
 survey = Game.get_survey!(survey_id)
+
 # IO.inspect(survey)
 
 question_params = %{"text" => "some text"}
-question = Game.create_question(question_params, survey)
+{:ok, question2} = Game.create_question(question_params, survey)
+
+choice1_q2_data = %{
+  text: "choice1 q2"
+}
+
+choice2_q2_data = %{
+  text: "choice2 q2"
+}
+
+choice1_q2 = Ecto.build_assoc(question2, :choices, choice1_q2_data)
+
+choice1_q2 =
+  Repo.insert!(choice1_q2)
+  |> Repo.preload(:question)
+
+choice2_q2 = Ecto.build_assoc(question2, :choices, choice2_q2_data)
+
+choice2_q2 =
+  Repo.insert!(choice2_q2)
+  |> Repo.preload(:question)
+
+question1_survey_nsavois = Repo.preload(question1_survey_nsavois, :choices)
 
 # IO.inspect(question)
 
