@@ -449,7 +449,7 @@ defmodule InstantSurvey.Game do
         on: s.id == q.survey_id,
         group_by: c.text,
         where: a.question_id == ^question_id and s.id == ^survey_id,
-        select: {c.text, count(c.id)}
+        select: {c.id, c.text, count(c.id)}
 
     Repo.all(query)
   end

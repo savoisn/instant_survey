@@ -27,8 +27,9 @@ defmodule InstantSurveyWeb.QuestionView do
     IO.inspect(param)
 
     %{
-      choice_text: elem(param, 0),
-      choice_count: elem(param, 1)
+      choice_id: elem(param, 0),
+      choice_text: elem(param, 1),
+      choice_count: elem(param, 2)
     }
   end
 end
