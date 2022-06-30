@@ -18,6 +18,15 @@ config :instant_survey, InstantSurveyWeb.Endpoint,
   pubsub_server: InstantSurvey.PubSub,
   live_view: [signing_salt: "eUx2ux1E"]
 
+config :esbuild,
+  version: "0.14.29",
+  default: [
+    args:
+      ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
+    cd: Path.expand("../assets", __DIR__),
+    env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
+  ]
+
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails

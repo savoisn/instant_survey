@@ -15,9 +15,10 @@ defmodule InstantSurvey.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: InstantSurvey.PubSub},
       # Start the Endpoint (http/https)
-      InstantSurveyWeb.Endpoint
+      InstantSurveyWeb.Endpoint,
       # Start a worker by calling: InstantSurvey.Worker.start_link(arg)
       # {InstantSurvey.Worker, arg}
+      InstantSurveyWeb.Presence
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

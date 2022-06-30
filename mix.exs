@@ -39,6 +39,7 @@ defmodule InstantSurvey.MixProject do
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.6"},
       {:ecto_sqlite3, ">= 0.0.0"},
+      {:esbuild, "~> 0.4", runtime: Mix.env() == :dev},
       {:phoenix_live_dashboard, "~> 0.6"},
       {:swoosh, "~> 1.3"},
       {:telemetry_metrics, "~> 0.6"},
@@ -60,6 +61,7 @@ defmodule InstantSurvey.MixProject do
   defp aliases do
     [
       setup: ["deps.get", "ecto.setup"],
+      "assets.deploy": ["esbuild default --minify", "phx.digest"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       "openapi.gen": ["openapi.spec.json --spec InstantSurveyWeb.ApiSpec"],

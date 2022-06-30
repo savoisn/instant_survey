@@ -1,13 +1,30 @@
 defmodule InstantSurveyWeb.SurveyChannel do
   use InstantSurveyWeb, :channel
 
+  alias InstantSurveyWeb.Presence
+
   @impl true
   def join("survey:lobby", payload, socket) do
+    send(self(), :after_join)
+
     if authorized?(payload) do
       {:ok, socket}
     else
       {:error, %{reason: "unauthorized"}}
     end
+  end
+
+  @impl true
+  def handle_info(:after_join, socket) do
+    IO.inspect(socket.assigns)
+
+    {:ok, _} =
+      Presence.track(socket, socket.assigns["name"], %{
+        online_at: inspect(System.system_time(:second))
+      })
+
+    push(socket, "presence_state", Presence.list(socket))
+    {:noreply, socket}
   end
 
   # Channels can be used in a request/response fashion
