@@ -47,6 +47,30 @@ defmodule InstantSurveyWeb.Schemas.Question do
     })
   end
 
+  defmodule Result do
+    OpenApiSpex.schema(%{
+      title: "Question Response",
+      description: "Response schema for single question",
+      type: :object,
+      properties: %{
+        choice_count: %Schema{type: :integer, description: "number of response of this choice"},
+        choice_id: %Schema{type: :integer, description: "Choice ID"},
+        choice_text: %Schema{
+          type: :string,
+          description: "Choice Text",
+          pattern: ~r/[a-zA-Z][a-zA-Z0-9_]+/
+        }
+      },
+      example: %{
+        "data" => %{
+          choice_count: 3,
+          choice_id: 9,
+          choice_text: "text du choix"
+        }
+      }
+    })
+  end
+
   defmodule Responses do
     alias InstantSurveyWeb.Schemas.Question.Params, as: QuestionParams
 
@@ -68,6 +92,33 @@ defmodule InstantSurveyWeb.Schemas.Question do
             "id" => 2,
             "text" => "another question text",
             "survey_id" => 1
+          }
+        ]
+      }
+    })
+  end
+
+  defmodule Results do
+    alias InstantSurveyWeb.Schemas.Question.Result, as: Result
+
+    OpenApiSpex.schema(%{
+      title: "Questions Results",
+      description: "Results schema for a questions",
+      type: :object,
+      properties: %{
+        data: %Schema{description: "The question result", type: :array, items: Result}
+      },
+      example: %{
+        "data" => [
+          %{
+            choice_count: 3,
+            choice_id: 9,
+            choice_text: "text du choix"
+          },
+          %{
+            choice_count: 8,
+            choice_id: 12,
+            choice_text: "autre choix"
           }
         ]
       }

@@ -7,6 +7,7 @@ defmodule InstantSurveyWeb.QuestionController do
   alias InstantSurveyWeb.Schemas.Question.Responses, as: QuestionsResponse
   alias InstantSurveyWeb.Schemas.Question.Response, as: QuestionResponse
   alias InstantSurveyWeb.Schemas.Question.Params, as: QuestionParams
+  alias InstantSurveyWeb.Schemas.Question.Results, as: Results
   alias InstantSurvey.Game
   alias InstantSurvey.Game.Question
 
@@ -160,7 +161,7 @@ defmodule InstantSurveyWeb.QuestionController do
       ]
     ],
     responses: [
-      ok: {"Question response", "application/json", QuestionResponse}
+      ok: {"Results response", "application/json", Results}
     ]
 
   def result(conn, %{"question_id" => question_id, "survey_id" => survey_id}) do

@@ -19,13 +19,10 @@ defmodule InstantSurveyWeb.QuestionView do
   end
 
   def render("result.json", %{result: params}) do
-    IO.inspect(params)
     %{data: render_many(params, QuestionView, "res.json", as: :param)}
   end
 
   def render("res.json", %{param: param}) do
-    IO.inspect(param)
-
     %{
       choice_id: elem(param, 0),
       choice_text: elem(param, 1),
