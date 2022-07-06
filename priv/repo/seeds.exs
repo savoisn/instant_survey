@@ -38,9 +38,9 @@ user = %{
 # IO.inspect(nsavois)
 
 alice_data = %{
-  username: "adinuno",
+  username: "adinunno",
   firstname: "Alice",
-  lastname: "Di Nuno"
+  lastname: "Di Nunno"
 }
 
 {:ok, alice} = Accounts.create_user(alice_data)

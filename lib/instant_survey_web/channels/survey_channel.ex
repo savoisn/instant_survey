@@ -29,8 +29,6 @@ defmodule InstantSurveyWeb.SurveyChannel do
 
   @impl true
   def handle_info({:after_join, channel_id}, socket) do
-    IO.inspect(socket.assigns)
-
     {:ok, _} =
       Presence.track(socket, socket.assigns["name"], %{
         online_at: inspect(System.system_time(:second)),
