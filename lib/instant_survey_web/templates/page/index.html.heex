@@ -3,6 +3,54 @@
   <p>Peace of mind from prototype to production</p>
 </section>
 
+<div x-data="{ channel_id:0, channel: {}, counter: 1, shout_payload: {}, leaderCtrl: false, leader: false, next_question_id: null, logs: [] }">
+
+  <div>
+    <select name="browser" x-model="channel_id">
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+    </select>
+
+
+    <span>leader</span>
+    <input x-model="leaderCtrl" type="checkbox" id="leader" name="leader">
+  </div>
+
+  <button @click="
+  if(channel && channel.state === 'joined'){
+    channel.leave()
+  }
+  leader = leaderCtrl
+  channel = socket.channel('survey:' + channel_id, {'name':'Nico'})
+  channel.join()
+    .receive('ok', resp => { console.log('Joined successfully', resp); logs=['Successfully Joined channel ' + channel_id, ...logs] })
+    .receive('error', resp => { console.log('Unable to join', resp) })
+  channel.on('shout', payload => { counter += 1; console.log(payload); logs=['shout', ...logs] })
+  if(!leader){
+    channel.on('next_question', payload => { console.log('next question',payload.next_question_id) ; logs=['next question '+payload.next_question_id, ...logs] })
+    channel.on('display_question_result', payload => { console.log('result : ',payload.question_id) ; logs=['result for question '+payload.question_id, ...logs]})
+  }
+  ">Connect</button>
+
+    <div>
+      <button x-bind:disabled="!leader" @click="channel.push('push_to_next_question', {survey_id: 2, next_question_id: 3})">Next Question</button>
+      <button x-bind:disabled="!leader" @click="channel.push('display_question_result', {survey_id: 2, question_id: 3})">Display Question Result</button>
+    </div>
+
+    <div x-text="counter">Contents...</div>
+    <div x-text="shout_payload"></div>
+
+    <template x-for="log in logs">
+        <li x-text="log"></li>
+    </template>
+
+</div>
+
+
+
 <section class="row">
   <article class="column">
     <h2>Resources</h2>
